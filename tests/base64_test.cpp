@@ -212,11 +212,11 @@ TEST_SUITE("Base64 Encoding and Decoding")
 
         TEST_CASE("Large data handling")
         {
-            // Create a 1MB test data
+            // Create 1MB test data
             constexpr size_t size = 1024 * 1024;
             std::vector<std::byte> large_data(size);
 
-            // Fill with repeating pattern
+            // Fill with a repeating pattern
             for (size_t i = 0; i < size; ++i)
             {
                 large_data[i] = std::byte{static_cast<unsigned char>(i % 256)};
@@ -248,15 +248,17 @@ TEST_SUITE("Base64 Encoding and Decoding")
                 REQUIRE(decoded.has_value());
                 CHECK(decoded.value() == test_case);
 
-                // Check padding length is correct
-                const size_t padding_count = std::ranges::count(encoded.value(), '=');
+                // Check the padding length is correct
+                const size_t padding_count = std::ranges::count(
+                    encoded.value(), '=');
                 CHECK(padding_count == (3 - (test_case.size() % 3)) % 3);
             }
         }
 
         TEST_CASE("Unicode string handling")
         {
-            std::string unicode_str = "Hello, 世界! 🌍";
+            std::string unicode_str = "Hello, 世界! 🌍";  // Most other compilers default to UTF-8
+
             auto bytes = string_to_bytes(unicode_str);
 
             auto encoded = base64::base64_encode(bytes);
@@ -282,7 +284,8 @@ TEST_SUITE("Base64 Encoding and Decoding")
                                       [&]()
                                       {
                                           return std::byte{
-                                              static_cast<unsigned char>(dis(gen))
+                                              static_cast<unsigned char>(dis(
+                                                  gen))
                                           };
                                       });
 

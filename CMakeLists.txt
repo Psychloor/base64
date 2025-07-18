@@ -1,10 +1,21 @@
 ﻿
 cmake_minimum_required(VERSION 3.31)
-project(base64 VERSION 1.0.0)
+project(base64 VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Add UTF-8 source file encoding support for all compilers
+if(MSVC)
+    add_compile_options(/utf-8 /Zc:__cplusplus)  # Added /Zc:__cplusplus for proper C++ version detection
+    add_compile_definitions(_UNICODE UNICODE _CRT_SECURE_NO_WARNINGS)
+else()
+    add_compile_options(-finput-charset=UTF-8 -fexec-charset=UTF-8)
+    add_compile_definitions(__STDC_ISO_10646__=201103L)
+endif()
+
+
 
 # Include necessary CMake modules
 include(FetchContent)
