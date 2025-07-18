@@ -187,7 +187,7 @@ MIT License
 - 1.1.0
     - Added file operations support
     - Added configurable chunk size for file operations
-    - Enhanced error handling with polymorphic error type
+    - Enhanced error handling with a polymorphic error type
     - Added URL-safe encoding/decoding support
     - Improved test coverage
 - 1.0.0
