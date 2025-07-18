@@ -16,7 +16,7 @@ TEST_SUITE("Base64 Encoding and Decoding") {
         std::vector<std::byte> empty;
         auto empty_result = base64::base64_encode(empty);
         CHECK(!empty_result.has_value());
-        CHECK(empty_result.error() == base64::base64_result::empty_data);
+        CHECK(empty_result.error() == base64::error::empty_data);
 
         // Test case 3: Single character
         std::string single = "A";
@@ -34,12 +34,12 @@ TEST_SUITE("Base64 Encoding and Decoding") {
         // Test case 2: Empty string
         auto empty_result = base64::base64_decode("");
         CHECK(!empty_result.has_value());
-        CHECK(empty_result.error() == base64::base64_result::empty_data);
+        CHECK(empty_result.error() == base64::error::empty_data);
 
         // Test case 3: Invalid length
         auto invalid_length = base64::base64_decode("SGVsbG8");
         CHECK(!invalid_length.has_value());
-        CHECK(invalid_length.error() == base64::base64_result::invalid_length);
+        CHECK(invalid_length.error() == base64::error::invalid_length);
     }
 
     TEST_CASE("URL-safe encoding") {
@@ -54,19 +54,19 @@ TEST_SUITE("Base64 Encoding and Decoding") {
     TEST_CASE("Invalid character handling") {
         auto invalid_char = base64::base64_decode("SGVs!G8=");
         CHECK(!invalid_char.has_value());
-        CHECK(invalid_char.error() == base64::base64_result::invalid_character);
+        CHECK(invalid_char.error() == base64::error::invalid_character);
     }
 
     TEST_CASE("Custom character set validation") {
         std::string input = "Test";
         auto result = base64::base64_encode(string_to_bytes(input), "ABC");
         CHECK(!result.has_value());
-        CHECK(result.error() == base64::base64_result::invalid_character_set_length);
+        CHECK(result.error() == base64::error::invalid_character_set_length);
 
         result = base64::base64_encode(string_to_bytes(input),
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ=bcdefghijklmnopqrstuvwxyz0123456789+/");
         CHECK(!result.has_value());
-        CHECK(result.error() == base64::base64_result::invalid_character_set_padding_char_used);
+        CHECK(result.error() == base64::error::invalid_character_set_padding_char_used);
     }
 
     TEST_CASE("Round-trip testing") {
