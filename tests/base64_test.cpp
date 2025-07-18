@@ -84,4 +84,6 @@ TEST_SUITE("Base64 Encoding and Decoding") {
             CHECK(bytes_to_string(decoded.value()) == test_str);
         }
     }
+
+
 }
