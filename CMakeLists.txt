@@ -29,7 +29,7 @@ target_include_directories(base64 INTERFACE
 )
 
 # Enable testing functionality
-if(PROJECT_IS_TOP_LEVEL)
+if (PROJECT_IS_TOP_LEVEL)
     enable_testing()
 
     # Create test executable
@@ -64,7 +64,7 @@ if(PROJECT_IS_TOP_LEVEL)
             COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
             DEPENDS base64_tests
     )
-endif()
+endif ()
 
 # Installation configuration
 install(

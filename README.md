@@ -1,6 +1,7 @@
 ﻿# Modern C++ Base64 Library
 
-A header-only C++23 implementation of Base64 encoding and decoding with extensive error handling and URL-safe support.
+A header-only C++23 implementation of Base64 encoding and decoding with
+extensive error handling and URL-safe support.
 
 ## Features
 
@@ -21,9 +22,12 @@ A header-only C++23 implementation of Base64 encoding and decoding with extensiv
 ## Installation
 
 ### Method 1: Header-only
-This is a header-only library. Simply copy `include/base64.hpp` to your project and include it.
+
+This is a header-only library. Simply copy `include/base64.hpp` to your project
+and include it.
 
 ### Method 2: CMake FetchContent
+
 ```
 cmake
 include(FetchContent)
@@ -36,13 +40,17 @@ FetchContent_MakeAvailable(base64)
 
 target_link_libraries(your_target PRIVATE base64::base64)
 ```
+
 ### Method 3: CMake Subdirectory
+
 ```
 cmake
 add_subdirectory(base64)
 target_link_libraries(your_target PRIVATE base64::base64)
 ```
+
 ### Method 4: System Installation
+
 ```
 bash
 # Clone the repository
@@ -59,13 +67,17 @@ cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
 cmake --build .
 sudo cmake --install .
 ```
+
 Then in your project's CMakeLists.txt:
+
 ```
 cmake
 find_package(base64 REQUIRED)
 target_link_libraries(your_target PRIVATE base64::base64)
 ```
+
 ## Usage
+
 ```
 cpp
 #include <base64.hpp>
@@ -91,6 +103,7 @@ std::cout << "Decoded: " << result << '\n';
 // URL-safe encoding
 auto url_safe = base64::base64_encode(bytes, base64::base64_chars_url_safe);
 ```
+
 ## Error Handling
 
 The library uses `std::expected` for error handling. Possible errors:
@@ -102,6 +115,7 @@ The library uses `std::expected` for error handling. Possible errors:
 - `invalid_character_set_padding_char_used`: Padding character in custom set
 
 ## Building and Testing
+
 ```
 bash
 # Clone the repository
@@ -123,7 +137,9 @@ ctest --output-on-failure
 # Or use the convenience target
 cmake --build . --target run_tests
 ```
+
 ## Project Structure
+
 ```
 
 base64/
@@ -138,6 +154,7 @@ base64/
 ├── base64_test.cpp
 └── base64_test.hpp
 ```
+
 ## Contributing
 
 1. Fork the repository
@@ -153,7 +170,7 @@ MIT License
 ## Version History
 
 - 1.0.0
-  - Initial release
-  - Base64 encoding/decoding with error handling
-  - URL-safe encoding support
-  - CMake installation support
+    - Initial release
+    - Base64 encoding/decoding with error handling
+    - URL-safe encoding support
+    - CMake installation support
