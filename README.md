@@ -7,9 +7,11 @@ extensive error handling and URL-safe support.
 
 - Header-only implementation
 - Modern C++23 features (`std::expected`, `std::span`, `constinit`)
-- Comprehensive error handling
+- Polymorphic error handling
 - URL-safe encoding support
 - Custom character set support
+- File operations support
+- Configurable chunk size for large file operations
 - Extensive test coverage
 - Zero dependencies (beyond C++23 standard library)
 - CMake installation support with proper config files
@@ -27,7 +29,6 @@ This is a header-only library. Simply copy `include/base64.hpp` to your project
 and include it.
 
 ### Method 2: CMake FetchContent
-
 ```
 cmake
 include(FetchContent)
@@ -40,17 +41,13 @@ FetchContent_MakeAvailable(base64)
 
 target_link_libraries(your_target PRIVATE base64::base64)
 ```
-
 ### Method 3: CMake Subdirectory
-
 ```
 cmake
 add_subdirectory(base64)
 target_link_libraries(your_target PRIVATE base64::base64)
 ```
-
 ### Method 4: System Installation
-
 ```
 bash
 # Clone the repository
@@ -67,17 +64,13 @@ cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
 cmake --build .
 sudo cmake --install .
 ```
-
 Then in your project's CMakeLists.txt:
-
 ```
 cmake
 find_package(base64 REQUIRED)
 target_link_libraries(your_target PRIVATE base64::base64)
 ```
-
 ## Usage
-
 ```
 cpp
 #include <base64.hpp>
@@ -102,20 +95,45 @@ std::cout << "Decoded: " << result << '\n';
 
 // URL-safe encoding
 auto url_safe = base64::base64_encode(bytes, base64::base64_chars_url_safe);
-```
 
+// File operations
+auto file_encoded = base64::base64_encode_file("input.txt");
+if (file_encoded) {
+std::cout << "Encoded file content: " << file_encoded.value() << '\n';
+}
+
+// File to file encoding with custom chunk size
+auto error = base64::base64_encode_file_to_file(
+"input.txt",
+"output.txt",
+base64::base64_chars,
+65536  // chunk size
+);
+if (!error) {
+std::cout << "File encoded successfully!\n";
+}
+```
 ## Error Handling
 
-The library uses `std::expected` for error handling. Possible errors:
+The library uses `std::expected` with a polymorphic error type for comprehensive error handling. Possible errors:
 
+### Basic Operation Errors
 - `empty_data`: Input data is empty
 - `invalid_length`: Input has invalid length (for decoding)
-- `invalid_character`: Invalid character in input
+- `invalid_character`: Invalid character in input data
 - `invalid_character_set_length`: Custom character set isn't 64 characters
 - `invalid_character_set_padding_char_used`: Padding character in custom set
 
-## Building and Testing
+### File Operation Errors
+- `io_error`: General I/O operation error
+- `file_not_found`: Specified file does not exist
+- `file_access_denied`: Permission denied when accessing file
+- `file_too_large`: File size exceeds maximum supported size
+- `file_read_error`: Error occurred while reading from file
+- `file_write_error`: Error occurred while writing to file
 
+
+## Building and Testing
 ```
 bash
 # Clone the repository
@@ -137,9 +155,7 @@ ctest --output-on-failure
 # Or use the convenience target
 cmake --build . --target run_tests
 ```
-
 ## Project Structure
-
 ```
 
 base64/
@@ -154,7 +170,6 @@ base64/
 ├── base64_test.cpp
 └── base64_test.hpp
 ```
-
 ## Contributing
 
 1. Fork the repository
@@ -169,6 +184,12 @@ MIT License
 
 ## Version History
 
+- 1.1.0
+    - Added file operations support
+    - Added configurable chunk size for file operations
+    - Enhanced error handling with polymorphic error type
+    - Added URL-safe encoding/decoding support
+    - Improved test coverage
 - 1.0.0
     - Initial release
     - Base64 encoding/decoding with error handling

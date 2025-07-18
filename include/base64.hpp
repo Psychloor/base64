@@ -12,7 +12,23 @@
 
 namespace base64
 {
-    // Error handling
+    /**
+     * @brief Enumeration representing various error codes for Base64 operations.
+     *
+     * Provides detailed error feedback for issues encountered during
+     * Base64 encoding or decoding processes.
+     *
+     * @enum success                    Operation completed successfully.
+     * @enum empty_data                 Input data is empty.
+     * @enum invalid_length             Input data length is not valid for Base64 processing.
+     * @enum invalid_character          Invalid character encountered in input.
+     * @enum invalid_character_set_length Character set must contain exactly 64 characters.
+     * @enum invalid_character_set_padding_char_used The Padding character '=' is not allowed in the character set.
+     * @enum file_not_found             A specified file was not found.
+     * @enum file_not_readable          File is not readable due to permissions or other restrictions.
+     * @enum file_too_large             File size exceeds the maximum allowed size for processing.
+     * @enum io_error                   General I/O error encountered while accessing a file.
+     */
     enum class error : uint8_t
     {
         success = 0,
@@ -348,8 +364,7 @@ namespace base64
                 file.read(reinterpret_cast<char*>(buffer.data()),
                           static_cast<std::streamsize>(buffer.size()));
 
-                const auto bytes_read = file.gcount();
-                if (bytes_read > 0)
+                if (const auto bytes_read = file.gcount(); bytes_read > 0)
                 {
                     encoder.process_chunk(std::span(buffer.data(), bytes_read));
                 }
@@ -420,7 +435,7 @@ namespace base64
             // Setup streaming encoder
             detail::stream_encoder encoder(chunk_size, chars, chunk_size);
 
-            // Process the file in chunks and write directly to output
+            // Process the file in chunks and write directly to the output
             while (input && !input.eof())
             {
                 auto buffer = encoder.get_buffer();
